@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreLocation
+import Parse
+import Bolts
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
@@ -19,6 +21,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        Parse.enableLocalDatastore()
+        
+        // Initialize Parse.
+        Parse.setApplicationId("ylQsk9AtHu1DBKKKqytDZsMGA65738lQq6WdvcT7",
+            clientKey: "UuzO7NFowtMRdd81w7dtkzMnoWHYWMtfI6GIFVZB")
+        
+        // [Optional] Track statistics around application opens.
+        PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
+        
         
         let uuidString = "B9407F30-F5F8-466E-AFF9-25556B57FE6D"
         let beaconUUID = NSUUID(UUIDString: uuidString)
@@ -132,12 +144,19 @@ extension AppDelegate: CLLocationManagerDelegate  {
             case CLProximity.Immediate:
               //  if (self.lastProximity != CLProximity.Immediate)  {
                 println("You are in the immediate proximity of \(region.identifier) beacon")
+                if let currentUser = PFUser.currentUser() {
+                    currentUser["currentRoom"] = region.identifier
+                    currentUser.saveEventually()
+                }
                 NSNotificationCenter.defaultCenter().postNotificationName("\(region.identifier)Immediate", object: self)
                // }
             case CLProximity.Near:
               //  if (self.lastProximity != proximity)  {
                 println("You are near \(region.identifier) beacon")
-                NSNotificationCenter.defaultCenter().postNotificationName("\(region.identifier)Near", object: self)
+//                if let currentUser = PFUser.currentUser() {
+//                    currentUser["currentRoom"] = region.identifier
+//                }
+                //NSNotificationCenter.defaultCenter().postNotificationName("\(region.identifier)Near", object: self)
               //  }
             case CLProximity.Far:
               //  if (self.lastProximity != proximity)  {
@@ -154,25 +173,34 @@ extension AppDelegate: CLLocationManagerDelegate  {
 //        sendLocalNotificationWithMessage(message)
     }
     
-//    func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
+    func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
+        println("You have entered the Beacon Region")
+        
+        if let currentUser = PFUser.currentUser() {
+            currentUser["dateLastEntered"] = NSDate()
+            currentUser["isInBuilding"] = NSNumber(bool: true)
+            currentUser.saveEventually()
+        }
+        
 //        manager.startRangingBeaconsInRegion(region as! CLBeaconRegion)
 //        manager.startUpdatingLocation()
 //        let notification = UILocalNotification()
-//        println("You have entered the Beacon Region")
 //        sendLocalNotificationWithMessage("You entered the Beacon Region")
 //        notification.soundName = UILocalNotificationDefaultSoundName;
-//        
-//    }
-//    
-//    func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
+    }
+
+    func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
+        println("You have exited the Beacon Region")
+        if let currentUser = PFUser.currentUser() {
+            currentUser["dateLastExited"] = NSDate()
+            currentUser["isInBuilding"] = false
+            currentUser["currentRoom"] = ""
+            currentUser.saveEventually()
+        }
 //        manager.stopRangingBeaconsInRegion(region as! CLBeaconRegion)
 //        manager.stopUpdatingLocation()
-//        println("You have exited the Beacon Region")
 //        sendLocalNotificationWithMessage("You have exited the Beacon Region")
-//    }
-    
-
-    
+    }
     
 }
 

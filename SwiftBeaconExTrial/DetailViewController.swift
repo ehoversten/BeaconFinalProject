@@ -13,7 +13,7 @@ var bioArray : [Course]!
 
 class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
-    var currentCourse :Course!   // of type Course (object)
+    var currentCourse : Course!   // of type Course (object)
     @IBOutlet var bioButton : UIButton!
     @IBOutlet var courseLabel : UILabel!
     @IBOutlet var topicTableView : UITableView!

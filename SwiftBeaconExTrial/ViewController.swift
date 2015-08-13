@@ -7,18 +7,21 @@
 //
 
 import UIKit
-
-
+import Parse
+import ParseUI
 
 let beacon_1_Identifier = "FrontEndRoom"
 let beacon_2_Identifier = "RubyRoom"
 let beacon_3_Identifier = "iOSRoom"
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate  {
     
     var courseArray : [Course]!
     var currentRoom = ""
+    var rollCallHereArray : [PFUser]?
+//    var currentUser : PFUser?
+    @IBOutlet var loginButton : UIBarButtonItem!
     @IBOutlet var beaconLabel : UILabel!
     @IBOutlet var colorLabel : UILabel!
     @IBOutlet var frontEndButton : UIButton!
@@ -27,6 +30,7 @@ class ViewController: UIViewController {
     @IBOutlet var staffButton : UIButton!
     @IBOutlet var websiteButton : UIButton!
     @IBOutlet var pictureView : UIImageView!
+    @IBOutlet var rollCallButton : UIButton!
     
     
     
@@ -71,7 +75,46 @@ class ViewController: UIViewController {
         }
     }
     
-    // MARK - Interactivity Methods
+    // MARK: - Login Methods
+    
+    @IBAction func loginBarButtonPressed(sender:UIBarButtonItem)  {
+        println("Login")
+        if loginButton.title == "Log In"  {
+            var logInController = PFLogInViewController()
+            logInController.delegate = self
+            var signUpController = PFSignUpViewController()
+            signUpController.delegate = self
+            logInController.signUpController = signUpController
+            self.presentViewController(logInController, animated: true, completion: nil)
+        } else {
+            PFUser.logOut()
+            loginButton.title = "Log In"
+        }
+    }
+    
+    func logInViewController(logInController: PFLogInViewController, didLogInUser user: PFUser) -> Void {
+        println("Logged in")
+        loginButton.title = "Log Out"
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func logInViewControllerDidCancelLogIn(logInController: PFLogInViewController) -> Void  {
+        println("Login Cancelled")
+        loginButton.title = "Log In"
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func signUpViewController(signUpController: PFSignUpViewController, didSignUpUser user: PFUser) -> Void {
+        println("Did sign up")
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController) -> Void {
+        println("Sign up Cancelled")
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+        // MARK: - Interactivity Methods
     
     @IBAction func frontEndButtonPressed(sender: UIButton)   {
         println("Front End Button Pressed")
@@ -95,6 +138,11 @@ class ViewController: UIViewController {
         performSegueWithIdentifier("staffSegue", sender: self)
     }
     
+    @IBAction func rollCallButtonPressed(sender: UIButton) {
+        println("Roll Call Pressed")
+        performSegueWithIdentifier("rollCallSegue", sender: self)
+    }
+    
     @IBAction func websiteButtonPressed(sender: UIButton)    {
         println("Website Pressed")
     }
@@ -104,6 +152,9 @@ class ViewController: UIViewController {
             var destController = segue.destinationViewController as! StaffViewController
             destController.staffArray = courseArray
             println("Bio")
+        } else if segue.identifier == "rollCallSegue"  {
+            var destController = segue.destinationViewController as! RollCallViewController
+                println("Roll Call")
         } else {
             var destController = segue.destinationViewController as! DetailViewController
             
@@ -127,6 +178,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        // MARK - Notifications
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"frontEndRoomEntered:" , name: "\(beacon_1_Identifier)Immediate", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"rubyRoomEntered:" , name: "\(beacon_2_Identifier)Immediate", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"iOSRoomEntered:" , name: "\(beacon_3_Identifier)Immediate", object: nil)

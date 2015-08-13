@@ -21,11 +21,14 @@ class StaffViewController: UIViewController, UITableViewDataSource, UITableViewD
        // return courseArray.count
     }
     
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 100.0
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
         cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
         let selectedBio = staffArray[indexPath.row]
-        
         cell.textLabel!.text = selectedBio.instructorName
         cell.detailTextLabel!.text = selectedBio.courseName
         cell.imageView!.image = UIImage(named: selectedBio.instructorImageFilename)
