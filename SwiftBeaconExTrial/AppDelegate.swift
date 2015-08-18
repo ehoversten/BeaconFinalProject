@@ -20,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
         
         Parse.enableLocalDatastore()
         
@@ -71,12 +70,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         // Start monitoring/ranging for Purple beacon
         locationManager!.startMonitoringForRegion(purpleBeaconRegion)
         locationManager!.startRangingBeaconsInRegion(purpleBeaconRegion)
-//        locationManager!.startUpdatingLocation()
+
         
         // Start monitoring/ranging for Blue beacon
         locationManager!.startMonitoringForRegion(blueBeaconRegion)
         locationManager!.startRangingBeaconsInRegion(blueBeaconRegion)
-//        locationManager!.startUpdatingLocation()
+
         
         // Start monitoring/ranging for Green beacon
         locationManager!.startMonitoringForRegion(greenBeaconRegion)
@@ -181,12 +180,11 @@ extension AppDelegate: CLLocationManagerDelegate  {
             currentUser["isInBuilding"] = NSNumber(bool: true)
             currentUser.saveEventually()
         }
-        
-//        manager.startRangingBeaconsInRegion(region as! CLBeaconRegion)
-//        manager.startUpdatingLocation()
-//        let notification = UILocalNotification()
-//        sendLocalNotificationWithMessage("You entered the Beacon Region")
-//        notification.soundName = UILocalNotificationDefaultSoundName;
+        manager.startMonitoringForRegion(region as! CLBeaconRegion)
+        manager.startUpdatingLocation()
+        let notification = UILocalNotification()
+        sendLocalNotificationWithMessage("Welcome to the Iron Yard D.C. Campus. Open the app and find out more!")
+        notification.soundName = UILocalNotificationDefaultSoundName;
     }
 
     func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
@@ -197,9 +195,9 @@ extension AppDelegate: CLLocationManagerDelegate  {
             currentUser["currentRoom"] = ""
             currentUser.saveEventually()
         }
-//        manager.stopRangingBeaconsInRegion(region as! CLBeaconRegion)
-//        manager.stopUpdatingLocation()
-//        sendLocalNotificationWithMessage("You have exited the Beacon Region")
+        manager.stopMonitoringForRegion(region as! CLBeaconRegion)
+        manager.stopUpdatingLocation()
+        sendLocalNotificationWithMessage("Thanks for Visiting!")
     }
     
 }

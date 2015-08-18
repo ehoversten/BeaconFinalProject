@@ -18,6 +18,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet var courseLabel : UILabel!
     @IBOutlet var topicTableView : UITableView!
     @IBOutlet var courseImageView : UIImageView!
+    @IBOutlet var instructorImageView : UIImageView!
     
     
     // MARK - TableView Methods
@@ -59,10 +60,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.viewWillAppear(animated)
         courseLabel.text = currentCourse.courseName
         courseImageView.image = UIImage(named: currentCourse.courseImageFilename)
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: currentCourse.courseBackgroundFilename)!)
+        instructorImageView.image = UIImage(named: currentCourse.instructorImageFilename)
         topicTableView.reloadData()
-//        bioButton.imageForState(currentCourse.instructorImageFilename)
-//        bioButton.textInputContextIdentifier = currentCourse.instructorName
-//        bioButton.imageView = UIImage(named: currentCourse.instructorImageFilename)
     }
 
     override func didReceiveMemoryWarning() {

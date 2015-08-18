@@ -11,7 +11,7 @@ import Parse
 
 class RollCallViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var rollCallUserArray : [PFUser]?
+    var rollCallUserArray = [PFUser]()
     
     @IBOutlet var rollCallTableView : UITableView!
     
@@ -19,59 +19,51 @@ class RollCallViewController: UIViewController, UITableViewDataSource, UITableVi
     // MARK : Parse Methods
     
     func fetchRollCallUsers()  {
-        var queryX = PFUser.query()
-        queryX?.addDescendingOrder("isInBuilding")
-        queryX?.addAscendingOrder("username")
-        rollCallUserArray = queryX?.findObjects() as? [PFUser]
-        println("UserCount: \(rollCallUserArray?.count)")
-        
-//        let query = PFQuery(className: "Attendance")
-//        query.addAscendingOrder("dataSent")
-//        query.findObjectsInBackgroundWithBlock { (objects: [AnyObject]?, error: NSError?) -> Void in
-//            if error == nil {
-//                println("Retrieving Roll Call with \(self.rollCallUserArray!.count)")
-//                
-//                if let usersPresent = usersPresent as? [PFObject] {
-//                    for rollCallUserArray in usersPresent {
-//                        println(userPresent.username)
-//                    }
-//                }
-//            } else {
-//                // Log details of the failure
-//                println("Error: \(error!) \(error!.userInfo!)")
-//            }
-//        }
+        if let queryX = PFUser.query() {
+            queryX.addDescendingOrder("isInBuilding")
+            queryX.addAscendingOrder("username")
+            queryX.findObjectsInBackgroundWithBlock { (objects: [AnyObject]?, error: NSError?) -> Void in
+                self.rollCallUserArray = (objects as! [PFUser])
+                self.rollCallTableView.reloadData()
+            }
+        }
+    
     }
-    
-    //- (void)fetchLogItems {
-    //    PFQuery *logItemQuery = [PFQuery queryWithClassName:@"MaintenanceLog"];
-    //    [logItemQuery addAscendingOrder:@"dataSent"];
-    //    [logItemQuery setLimit:1000];
-    //    [logItemQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-    //        NSLog(@"Got: %li", objects.count);
-    //        for (PFObject *logItem in objects) {
-    //            NSLog(@"Name: %@ Email:%@",[logItem objectForKey:@"username"], [logItem objectForKey:@"email"]);
-    //        }
-    //    }];
-    //}
-    
     
     // MARK : TableView Methods
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return rollCallUserArray!.count
+        return rollCallUserArray.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
-        let currentPerson = rollCallUserArray![indexPath.row]
+        cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
+        let currentPerson = rollCallUserArray[indexPath.row]
+        println("user: \(currentPerson.username)")
         cell.textLabel!.text = currentPerson.username
-        let isInBuilding = currentPerson["isInBuilding"]! as! Bool
-        if isInBuilding {
-            cell.backgroundColor = UIColor.greenColor()
+        
+        
+        // Check to see if user has entered the Beacon Monitoring Region and unwrap object
+        if let x: AnyObject = currentPerson["isInBuilding"] {
+            println("not null")
+            let isInBuilding = currentPerson["isInBuilding"]! as! Bool
+            if isInBuilding {
+                cell.backgroundColor = UIColor.greenColor()
+                if let currentRoom = currentPerson["currentRoom"]! as? String {
+                    cell.detailTextLabel!.text = currentRoom
+                } else {
+                    cell.detailTextLabel!.text = "Unknown Room"
+                }
+            } else {
+                cell.backgroundColor = UIColor.redColor()
+                cell.detailTextLabel!.text = "Not In Building"
+            }
         } else {
-            cell.backgroundColor = UIColor.redColor()
+            println("null")
+            cell.backgroundColor = UIColor.lightGrayColor()
+            cell.detailTextLabel!.text = "User Not Logged In"
         }
         return cell
     }
@@ -79,36 +71,19 @@ class RollCallViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         // add code to not highlight selected row
     }
-    
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         rollCallTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         fetchRollCallUsers()
-        rollCallTableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

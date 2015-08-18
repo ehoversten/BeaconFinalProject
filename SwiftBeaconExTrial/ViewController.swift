@@ -20,10 +20,10 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     var courseArray : [Course]!
     var currentRoom = ""
     var rollCallHereArray : [PFUser]?
-//    var currentUser : PFUser?
+
     @IBOutlet var loginButton : UIBarButtonItem!
     @IBOutlet var beaconLabel : UILabel!
-    @IBOutlet var colorLabel : UILabel!
+//    @IBOutlet var colorLabel : UILabel!
     @IBOutlet var frontEndButton : UIButton!
     @IBOutlet var rubyButton : UIButton!
     @IBOutlet var iosButton : UIButton!
@@ -31,6 +31,8 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     @IBOutlet var websiteButton : UIButton!
     @IBOutlet var pictureView : UIImageView!
     @IBOutlet var rollCallButton : UIButton!
+//    @IBOutlet var backgroundView : UIImageView!
+    
     
     
     
@@ -38,8 +40,6 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     func frontEndRoomEntered(note: NSNotification) {
         println("Welcome to the Front End Room")
-//        beaconLabel.text = "Welcome to the Front End Room"
-//        colorLabel.backgroundColor = UIColor.purpleColor()
         if currentRoom != "frontEndRoom" {
             currentRoom = "frontEndRoom"
             self.navigationController!.popToRootViewControllerAnimated(false)
@@ -51,8 +51,6 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     func rubyRoomEntered(note: NSNotification) {
         println("Welcome to the Ruby Room")
-//        beaconLabel.text = "Welcome to the Ruby Room"
-//        colorLabel.backgroundColor = UIColor.blueColor()
         if currentRoom != "rubyRoom" {
             currentRoom = "rubyRoom"
             self.navigationController!.popToRootViewControllerAnimated(false)
@@ -64,8 +62,6 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     func iOSRoomEntered(note: NSNotification) {
         println("Welcome to the iOS Room")
-        //        beaconLabel.text = "Welcome to the iOS Room"
-        //        colorLabel.backgroundColor = UIColor.greenColor()
         if currentRoom != "iOSRoom" {
             currentRoom = "iOSRoom"
             self.navigationController!.popToRootViewControllerAnimated(false)
@@ -75,11 +71,11 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         }
     }
     
-    // MARK: - Login Methods
+    // MARK: - Parse Login Methods
     
     @IBAction func loginBarButtonPressed(sender:UIBarButtonItem)  {
         println("Login")
-        if loginButton.title == "Log In"  {
+        if loginButton.title == "Login"  {
             var logInController = PFLogInViewController()
             logInController.delegate = self
             var signUpController = PFSignUpViewController()
@@ -88,7 +84,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
             self.presentViewController(logInController, animated: true, completion: nil)
         } else {
             PFUser.logOut()
-            loginButton.title = "Log In"
+            loginButton.title = "Login"
         }
     }
     
@@ -100,7 +96,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     func logInViewControllerDidCancelLogIn(logInController: PFLogInViewController) -> Void  {
         println("Login Cancelled")
-        loginButton.title = "Log In"
+        loginButton.title = "Login"
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -145,8 +141,11 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     @IBAction func websiteButtonPressed(sender: UIButton)    {
         println("Website Pressed")
+        if let url = NSURL(string: "http://theironyard.com/locations/washington-dc/")  {
+            UIApplication.sharedApplication().openURL(url)
+        }
     }
-    
+  
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "staffSegue"  {
             var destController = segue.destinationViewController as! StaffViewController
@@ -193,8 +192,9 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         
         // iOS Object Data
         let iosCourse = Course()
+        iosCourse.courseBackgroundFilename = "GreenBackground4"
         iosCourse.courseName = "Mobile Engineering"
-        iosCourse.courseTopicArray = ["Git and GitHub","Objective-C & C","Classes and Objects","Design fundamentals","Freelance fundamentals","MVC Fundamentals","Cocoa Design Patterns","Frameworks & Libraries","Memory Management & ARC","Core Libraries","UI Guidelines","Xcode IDE","Interface Builder","Deployment : TestFlight & App Store","Parse as a Backend","Getting Hired"]
+        iosCourse.courseTopicArray = ["Git and GitHub","Objective-C & C","Classes and Objects","Design fundamentals","Freelance fundamentals","MVC Fundamentals","Cocoa Design Patterns","Frameworks & Libraries","Memory Management & ARC","Core Libraries","UI Guidelines","Xcode IDE","Interface Builder","Deployment : TestFlight & App Store","Parse as a Backend","Finding a Job"]
         iosCourse.courseImageFilename = "mobile-engineering-icon"
         iosCourse.instructorImageFilename = "tom-crawford.jpg"
         iosCourse.instructorName = "Tom Crawford"
@@ -203,9 +203,11 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         
         // Campus Object Data
         let staffBio = Course()
+        staffBio.courseBackgroundFilename = "GreyBackground4"
         staffBio.courseName = "Campus Director"
         staffBio.courseTopicArray = nil
         staffBio.courseImageFilename = ""
+     //   staffBio.courseBackgroundFilename = ""
         staffBio.instructorImageFilename = "su-kim.jpg"
         staffBio.instructorName = "Su Kim"
         staffBio.instructorBio = "After a nomadic existence through the South, Midwest, and overseas, Su is planting roots in northern Virginia. She comes to The Iron Yard after several years of advocating for sensible immigration policy. Su is excited to show the impact that technology can have through education and see the DC campus grow in influence and support of the region. A 'non-political' political junkie, she loves all things games and DC-related shows."
@@ -213,8 +215,9 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         
         // Front End Object Data
         let frontEndCourse = Course()
+        frontEndCourse.courseBackgroundFilename = "BrownBackground5"
         frontEndCourse.courseName = "Front End Engineering"
-        frontEndCourse.courseTopicArray = ["Git and GitHub","HTML and CSS","Building Responsive Sites","Design fundamentals","Freelance fundamentals","JavaScript","jQuery","Underscore.js or Lo-Dash","Client-side JavaScript Frameworks","JavaScript Testing","Languages that compile to JavaScript","JavaScript Templating","Node.js Basics","Backends as a Service","Front End Tools","Getting Hired"]
+        frontEndCourse.courseTopicArray = ["Git and GitHub","HTML and CSS","Building Responsive Sites","Design fundamentals","Freelance fundamentals","JavaScript","jQuery","Underscore.js or Lo-Dash","Client-side JavaScript Frameworks","JavaScript Testing","Languages that compile to JavaScript","JavaScript Templating","Node.js Basics","Backends as a Service","Front End Tools","Finding a Job"]
         frontEndCourse.courseImageFilename = "front-end-engineering-icon"
         frontEndCourse.instructorImageFilename = "kyle-hill.jpg"
         frontEndCourse.instructorName = "Kyle Hill"
@@ -223,8 +226,9 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         
         // Ruby Object Data
         let rubyCourse = Course()  // create an object of type Course
+        rubyCourse.courseBackgroundFilename = "RedBackground2"
         rubyCourse.courseName = "Back End Engineering"
-        rubyCourse.courseTopicArray = ["Git and GitHub", "Rails Fundamentals","Testing, testing, testing","Design fundamentals","Freelance fundamentals","jQuery","MVC Fundamentals","Client-side Frameworks","HTML and CSS","JavaScript Basics","CoffeeScript","Deployment","Getting Hired"]
+        rubyCourse.courseTopicArray = ["Git and GitHub", "Rails Fundamentals","Testing, testing, testing","Design fundamentals","Freelance fundamentals","jQuery","MVC Fundamentals","Client-side Frameworks","HTML and CSS","JavaScript Basics","CoffeeScript","Deployment","Finding a Job"]
         rubyCourse.courseImageFilename = "rails-engineering-logo"
         rubyCourse.instructorImageFilename = "james-dabbs.jpg"
         rubyCourse.instructorName = "James Dabbs"
@@ -232,20 +236,18 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         
         courseArray = [iosCourse, frontEndCourse, rubyCourse, staffBio]   // array container to pass data
 
-
-
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         pictureView.image = UIImage(named: "tiy-logo")
         beaconLabel.text = "Welcome to the D.C. Campus!"
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "blueGradient2.png")!)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
     }
 
 

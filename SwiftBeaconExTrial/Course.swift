@@ -11,6 +11,7 @@ import UIKit
 class Course: NSObject {
     
     var courseImageFilename :String!
+    var courseBackgroundFilename :String!
     var courseName :String!
     var courseTopicArray :[String]!
     var instructorName :String!
