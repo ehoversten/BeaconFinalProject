@@ -21,6 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        // iPad hack to allow tableView to be transparent
+        UIScrollView.appearance().backgroundColor = UIColor.clearColor()
+        
         Parse.enableLocalDatastore()
         
         // Initialize Parse.
@@ -33,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         
         let uuidString = "B9407F30-F5F8-466E-AFF9-25556B57FE6D"
         let beaconUUID = NSUUID(UUIDString: uuidString)
+        let beaconIdentifier = "IronYard"
         
         // Purple Beacon
         let beacon_1_major: CLBeaconMajorValue = 22793
@@ -49,7 +53,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         let beacon_3_minor: CLBeaconMinorValue = 35386
         let beacon_3_Identifier = "iOSRoom"
         
-        
+        // All Beacons Region
+        let allBeaconsRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: beaconUUID, identifier: beaconIdentifier)
         
         // Purple Beacon Region
         let purpleBeaconRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: beaconUUID, major: beacon_1_major, minor:beacon_1_minor , identifier: beacon_1_Identifier)
@@ -63,22 +68,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         self.locationManager = CLLocationManager()
         if(locationManager!.respondsToSelector("requestAlwaysAuthorization"))   {
             locationManager!.requestAlwaysAuthorization()
+            //locationManager!.requestStateForRegion(CLBeaconRegion())
         }
         locationManager!.delegate = self
         locationManager!.pausesLocationUpdatesAutomatically = false
         
+        // Start monitoring for all Beacons
+        locationManager!.startMonitoringForRegion(allBeaconsRegion)
+        //locationManager!.startRangingBeaconsInRegion(allBeaconsRegion)
+        
         // Start monitoring/ranging for Purple beacon
-        locationManager!.startMonitoringForRegion(purpleBeaconRegion)
+        //locationManager!.startMonitoringForRegion(purpleBeaconRegion)
         locationManager!.startRangingBeaconsInRegion(purpleBeaconRegion)
 
         
         // Start monitoring/ranging for Blue beacon
-        locationManager!.startMonitoringForRegion(blueBeaconRegion)
+        //locationManager!.startMonitoringForRegion(blueBeaconRegion)
         locationManager!.startRangingBeaconsInRegion(blueBeaconRegion)
 
         
         // Start monitoring/ranging for Green beacon
-        locationManager!.startMonitoringForRegion(greenBeaconRegion)
+        //locationManager!.startMonitoringForRegion(greenBeaconRegion)
         locationManager!.startRangingBeaconsInRegion(greenBeaconRegion)
         
         // Start updating location for all beacon regions
@@ -131,7 +141,7 @@ extension AppDelegate: CLLocationManagerDelegate  {
     func locationManager(manager: CLLocationManager!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
 //        println("didRangeBeacons \(beacons.count)")
 
-        if (beacons.count > 0) {
+         if (beacons.count > 0) {
             let nearestBeacon: CLBeacon = beacons[0] as! CLBeacon
             
             if(nearestBeacon.proximity == lastProximity || nearestBeacon.proximity == CLProximity.Unknown) {
@@ -168,8 +178,19 @@ extension AppDelegate: CLLocationManagerDelegate  {
         } else {
 //            message = "No \(region.identifier) beacons nearby"
         }
-        
-//        sendLocalNotificationWithMessage(message)
+
+    }
+    
+    
+    func locationManager(manager: CLLocationManager!, didDetermineState state: CLRegionState, forRegion region: CLRegion!) {
+        switch state {
+        case .Unknown:
+            println("Region Unknown")
+        case .Inside:
+            println("Inside Beacon Region")
+        case .Outside:
+            println("Outside Beacon Region")
+        }
     }
     
     func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
@@ -180,11 +201,16 @@ extension AppDelegate: CLLocationManagerDelegate  {
             currentUser["isInBuilding"] = NSNumber(bool: true)
             currentUser.saveEventually()
         }
-        manager.startMonitoringForRegion(region as! CLBeaconRegion)
-        manager.startUpdatingLocation()
+
+        // if inRegion stop sending notifications
+        //manager.requestStateForRegion(region as! CLBeaconRegion)
+    
         let notification = UILocalNotification()
         sendLocalNotificationWithMessage("Welcome to the Iron Yard D.C. Campus. Open the app and find out more!")
         notification.soundName = UILocalNotificationDefaultSoundName;
+        
+        // if inRegion stop sending notifications
+        //  manager.requestStateForRegion(region as! CLBeaconRegion)
     }
 
     func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
@@ -195,8 +221,6 @@ extension AppDelegate: CLLocationManagerDelegate  {
             currentUser["currentRoom"] = ""
             currentUser.saveEventually()
         }
-        manager.stopMonitoringForRegion(region as! CLBeaconRegion)
-        manager.stopUpdatingLocation()
         sendLocalNotificationWithMessage("Thanks for Visiting!")
     }
     

@@ -30,9 +30,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
+        cell.backgroundColor = UIColor.clearColor()
+        cell.textLabel!.textColor = UIColor.whiteColor()
+
         cell.textLabel!.text = currentCourse.courseTopicArray[indexPath.row]
+        
         return cell
     }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 34.0
+    }
+
+//    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+//        cell.backgroundColor = UIColor.clearColor()
+//        cell.contentView.backgroundColor = UIColor.clearColor()
+//        var bgView = UIView(frame: CGRect.zeroRect)
+//        bgView.backgroundColor = UIColor.clearColor()
+//        cell.backgroundView = bgView
+//    }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         // add code to not highlight selected row
@@ -54,6 +70,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         topicTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        topicTableView.backgroundView = UIView.new()
+        topicTableView.backgroundView?.backgroundColor = UIColor.clearColor()
     }
     
     override func viewWillAppear(animated: Bool) {

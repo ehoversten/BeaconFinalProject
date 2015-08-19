@@ -22,8 +22,8 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     var rollCallHereArray : [PFUser]?
 
     @IBOutlet var loginButton : UIBarButtonItem!
+    @IBOutlet var presentButton : UIBarButtonItem!
     @IBOutlet var beaconLabel : UILabel!
-//    @IBOutlet var colorLabel : UILabel!
     @IBOutlet var frontEndButton : UIButton!
     @IBOutlet var rubyButton : UIButton!
     @IBOutlet var iosButton : UIButton!
@@ -31,7 +31,6 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     @IBOutlet var websiteButton : UIButton!
     @IBOutlet var pictureView : UIImageView!
     @IBOutlet var rollCallButton : UIButton!
-//    @IBOutlet var backgroundView : UIImageView!
     
     
     
@@ -134,8 +133,13 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         performSegueWithIdentifier("staffSegue", sender: self)
     }
     
-    @IBAction func rollCallButtonPressed(sender: UIButton) {
-        println("Roll Call Pressed")
+//    @IBAction func rollCallButtonPressed(sender: UIButton) {
+//        println("Roll Call Pressed")
+//        performSegueWithIdentifier("rollCallSegue", sender: self)
+//    }
+    
+    @IBAction func presentButtonPressed(sender: UIBarButtonItem)  {
+        println("Present Button Pressed")
         performSegueWithIdentifier("rollCallSegue", sender: self)
     }
     
@@ -169,7 +173,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
             
             if segue.identifier == "iosSegue" {
                 println("iOS")
-                destController.currentCourse = courseArray[0]
+                destController.currentCourse = courseArray[3]
             }
         }
     }
@@ -194,7 +198,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         let iosCourse = Course()
         iosCourse.courseBackgroundFilename = "GreenBackground4"
         iosCourse.courseName = "Mobile Engineering"
-        iosCourse.courseTopicArray = ["Git and GitHub","Objective-C & C","Classes and Objects","Design fundamentals","Freelance fundamentals","MVC Fundamentals","Cocoa Design Patterns","Frameworks & Libraries","Memory Management & ARC","Core Libraries","UI Guidelines","Xcode IDE","Interface Builder","Deployment : TestFlight & App Store","Parse as a Backend","Finding a Job"]
+        iosCourse.courseTopicArray = ["Objective-C & C","Classes and Objects","Design fundamentals","Freelance fundamentals","MVC Fundamentals","Cocoa Design Patterns","Frameworks & Libraries","Memory Management & ARC","Core Libraries","UI Guidelines","Xcode IDE","Interface Builder","Deployment : TestFlight & App Store","Parse as a Backend","Git and GitHub","Finding a Job"]
         iosCourse.courseImageFilename = "mobile-engineering-icon"
         iosCourse.instructorImageFilename = "tom-crawford.jpg"
         iosCourse.instructorName = "Tom Crawford"
@@ -217,7 +221,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         let frontEndCourse = Course()
         frontEndCourse.courseBackgroundFilename = "BrownBackground5"
         frontEndCourse.courseName = "Front End Engineering"
-        frontEndCourse.courseTopicArray = ["Git and GitHub","HTML and CSS","Building Responsive Sites","Design fundamentals","Freelance fundamentals","JavaScript","jQuery","Underscore.js or Lo-Dash","Client-side JavaScript Frameworks","JavaScript Testing","Languages that compile to JavaScript","JavaScript Templating","Node.js Basics","Backends as a Service","Front End Tools","Finding a Job"]
+        frontEndCourse.courseTopicArray = ["HTML and CSS","Building Responsive Sites","Design fundamentals","Freelance fundamentals","JavaScript","jQuery","Underscore.js or Lo-Dash","Client-side JavaScript Frameworks","JavaScript Testing","Languages that compile to JavaScript","JavaScript Templating","Node.js Basics","Backends as a Service","Front End Tools","Git and GitHub","Finding a Job"]
         frontEndCourse.courseImageFilename = "front-end-engineering-icon"
         frontEndCourse.instructorImageFilename = "kyle-hill.jpg"
         frontEndCourse.instructorName = "Kyle Hill"
@@ -228,13 +232,13 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         let rubyCourse = Course()  // create an object of type Course
         rubyCourse.courseBackgroundFilename = "RedBackground2"
         rubyCourse.courseName = "Back End Engineering"
-        rubyCourse.courseTopicArray = ["Git and GitHub", "Rails Fundamentals","Testing, testing, testing","Design fundamentals","Freelance fundamentals","jQuery","MVC Fundamentals","Client-side Frameworks","HTML and CSS","JavaScript Basics","CoffeeScript","Deployment","Finding a Job"]
+        rubyCourse.courseTopicArray = ["Rails Fundamentals","Testing, testing, testing","Design fundamentals","Freelance fundamentals","jQuery","MVC Fundamentals","Client-side Frameworks","HTML and CSS","JavaScript Basics","CoffeeScript","Deployment","Git and GitHub","Finding a Job"]
         rubyCourse.courseImageFilename = "rails-engineering-logo"
         rubyCourse.instructorImageFilename = "james-dabbs.jpg"
         rubyCourse.instructorName = "James Dabbs"
         rubyCourse.instructorBio = "Trained as a mathematician, James heard the siren call of software development while working on his PhD, jumped ship, and never looked back. Most recently, he's been crunching numbers as a senior engineer at Emcien in Atlanta. He's very excited to be back teaching and able to share his zeal for software and development. When not thinking about code or mumbling things about monads, James is also an enthusiastic drummer - mostly math rock, naturally."
         
-        courseArray = [iosCourse, frontEndCourse, rubyCourse, staffBio]   // array container to pass data
+        courseArray = [staffBio, frontEndCourse, rubyCourse, iosCourse]   // array container to pass data
 
     }
     
