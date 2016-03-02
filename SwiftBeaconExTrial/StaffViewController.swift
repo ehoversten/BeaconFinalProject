@@ -26,7 +26,7 @@ class StaffViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
+        var cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
         let selectedBio = staffArray[indexPath.row]
         cell.textLabel!.text = selectedBio.instructorName
@@ -42,10 +42,10 @@ class StaffViewController: UIViewController, UITableViewDataSource, UITableViewD
     // MARK - Interactivity Methods
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        var bioDestController = segue.destinationViewController as! BioViewController
-        println("Bio")
+        let bioDestController = segue.destinationViewController as! BioViewController
+        print("Bio")
         if segue.identifier == "bioFromListSegue"  {
-            let indexPath = staffTableView.indexPathForSelectedRow()
+            let indexPath = staffTableView.indexPathForSelectedRow
             if let unwrappedIndexPath = indexPath  {
                 let selectedBio = staffArray[unwrappedIndexPath.row]
                 bioDestController.currentBio = selectedBio

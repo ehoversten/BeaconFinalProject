@@ -231,10 +231,10 @@
 		C77DF54E1B73BBAC00414698 = {
 			isa = PBXGroup;
 			children = (
-				C75AF6F11B7CEDFE00D8A93E /* Frameworks */,
 				C77DF5591B73BBAC00414698 /* SwiftBeaconExTrial */,
 				C77DF56F1B73BBAC00414698 /* SwiftBeaconExTrialTests */,
 				C77DF5581B73BBAC00414698 /* Products */,
+				C75AF6F11B7CEDFE00D8A93E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -337,7 +337,9 @@
 		C77DF54F1B73BBAC00414698 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastSwiftMigration = 0720;
+				LastSwiftUpdateCheck = 0720;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = EverProductions;
 				TargetAttributes = {
 					C77DF5561B73BBAC00414698 = {
@@ -497,6 +499,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -570,6 +573,7 @@
 				INFOPLIST_FILE = SwiftBeaconExTrial/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.EvP.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -585,6 +589,7 @@
 				INFOPLIST_FILE = SwiftBeaconExTrial/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.EvP.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -603,6 +608,7 @@
 				);
 				INFOPLIST_FILE = SwiftBeaconExTrialTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.EvP.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftBeaconExTrial.app/SwiftBeaconExTrial";
 			};
@@ -618,6 +624,7 @@
 				);
 				INFOPLIST_FILE = SwiftBeaconExTrialTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.EvP.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftBeaconExTrial.app/SwiftBeaconExTrial";
 			};

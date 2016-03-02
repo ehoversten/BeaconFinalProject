@@ -31,6 +31,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     @IBOutlet var websiteButton : UIButton!
     @IBOutlet var pictureView : UIImageView!
     @IBOutlet var rollCallButton : UIButton!
+
     
     
     
@@ -38,7 +39,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     // MARK - Beacon Ranging Methods
     
     func frontEndRoomEntered(note: NSNotification) {
-        println("Welcome to the Front End Room")
+        print("Welcome to the Front End Room")
         if currentRoom != "frontEndRoom" {
             currentRoom = "frontEndRoom"
             self.navigationController!.popToRootViewControllerAnimated(false)
@@ -49,7 +50,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     }
     
     func rubyRoomEntered(note: NSNotification) {
-        println("Welcome to the Ruby Room")
+        print("Welcome to the Ruby Room")
         if currentRoom != "rubyRoom" {
             currentRoom = "rubyRoom"
             self.navigationController!.popToRootViewControllerAnimated(false)
@@ -60,7 +61,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     }
     
     func iOSRoomEntered(note: NSNotification) {
-        println("Welcome to the iOS Room")
+        print("Welcome to the iOS Room")
         if currentRoom != "iOSRoom" {
             currentRoom = "iOSRoom"
             self.navigationController!.popToRootViewControllerAnimated(false)
@@ -73,11 +74,11 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     // MARK: - Parse Login Methods
     
     @IBAction func loginBarButtonPressed(sender:UIBarButtonItem)  {
-        println("Login")
+        print("Login")
         if loginButton.title == "Login"  {
-            var logInController = PFLogInViewController()
+            let logInController = PFLogInViewController()
             logInController.delegate = self
-            var signUpController = PFSignUpViewController()
+            let signUpController = PFSignUpViewController()
             signUpController.delegate = self
             logInController.signUpController = signUpController
             self.presentViewController(logInController, animated: true, completion: nil)
@@ -88,48 +89,48 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     }
     
     func logInViewController(logInController: PFLogInViewController, didLogInUser user: PFUser) -> Void {
-        println("Logged in")
+        print("Logged in")
         loginButton.title = "Log Out"
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func logInViewControllerDidCancelLogIn(logInController: PFLogInViewController) -> Void  {
-        println("Login Cancelled")
+        print("Login Cancelled")
         loginButton.title = "Login"
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func signUpViewController(signUpController: PFSignUpViewController, didSignUpUser user: PFUser) -> Void {
-        println("Did sign up")
+        print("Did sign up")
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController) -> Void {
-        println("Sign up Cancelled")
+        print("Sign up Cancelled")
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
         // MARK: - Interactivity Methods
     
     @IBAction func frontEndButtonPressed(sender: UIButton)   {
-        println("Front End Button Pressed")
+        print("Front End Button Pressed")
         performSegueWithIdentifier("frontEndSegue", sender: self)
 
     }
     
     @IBAction func rubyButtonPressed(sender: UIButton)  {
-        println("Ruby Pressed")
+        print("Ruby Pressed")
         performSegueWithIdentifier("rubySegue", sender: self)
         
     }
     
     @IBAction func iosButtonPressed(sender: UIButton)   {
-        println("iOS Pressed")
+        print("iOS Pressed")
         performSegueWithIdentifier("iosSegue", sender: self)
     }
     
     @IBAction func staffButtonPressed(sender: UIButton)   {
-        println("staff pressed")
+        print("staff pressed")
         performSegueWithIdentifier("staffSegue", sender: self)
     }
     
@@ -139,12 +140,12 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
 //    }
     
     @IBAction func presentButtonPressed(sender: UIBarButtonItem)  {
-        println("Present Button Pressed")
+        print("Present Button Pressed")
         performSegueWithIdentifier("rollCallSegue", sender: self)
     }
     
     @IBAction func websiteButtonPressed(sender: UIButton)    {
-        println("Website Pressed")
+        print("Website Pressed")
         if let url = NSURL(string: "http://theironyard.com/locations/washington-dc/")  {
             UIApplication.sharedApplication().openURL(url)
         }
@@ -152,27 +153,27 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
   
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "staffSegue"  {
-            var destController = segue.destinationViewController as! StaffViewController
+            let destController = segue.destinationViewController as! StaffViewController
             destController.staffArray = courseArray
-            println("Bio")
+            print("Bio")
         } else if segue.identifier == "rollCallSegue"  {
-            var destController = segue.destinationViewController as! RollCallViewController
-                println("Roll Call")
-        } else {
-            var destController = segue.destinationViewController as! DetailViewController
+            let destController = segue.destinationViewController as! RollCallViewController
+                print("Roll Call")
+        } else  {
+            let destController = segue.destinationViewController as! DetailViewController
             
             if segue.identifier == "frontEndSegue" {
-                println("FES")
+                print("FES")
                 destController.currentCourse = courseArray[1]
             }
             
             if segue.identifier == "rubySegue"  {
-                println("RS")
+                print("RS")
                 destController.currentCourse = courseArray[2]
             }
             
             if segue.identifier == "iosSegue" {
-                println("iOS")
+                print("iOS")
                 destController.currentCourse = courseArray[3]
             }
         }

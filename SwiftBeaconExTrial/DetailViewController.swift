@@ -29,7 +29,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         cell.backgroundColor = UIColor.clearColor()
         cell.textLabel!.textColor = UIColor.whiteColor()
 
@@ -58,7 +58,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK - Interactivity Methods
     
     @IBAction func bioButtonPressed(sender: UIButton)   {
-        println("Bio Pressed")
+        print("Bio Pressed")
         performSegueWithIdentifier("bioSegue", sender: self)
     }
     
@@ -70,7 +70,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         topicTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        topicTableView.backgroundView = UIView.new()
+        topicTableView.backgroundView = UIView()
         topicTableView.backgroundView?.backgroundColor = UIColor.clearColor()
     }
     

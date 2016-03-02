@@ -38,16 +38,16 @@ class RollCallViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
+        var cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
         let currentPerson = rollCallUserArray[indexPath.row]
-        println("user: \(currentPerson.username)")
+        print("user: \(currentPerson.username)")
         cell.textLabel!.text = currentPerson.username
         
         
         // Check to see if user has entered the Beacon Monitoring Region and unwrap object
         if let x: AnyObject = currentPerson["isInBuilding"] {
-            println("not null")
+            print("not null")
             let isInBuilding = currentPerson["isInBuilding"]! as! Bool
             if isInBuilding {
                 cell.backgroundColor = UIColor.greenColor()
@@ -61,7 +61,7 @@ class RollCallViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.detailTextLabel!.text = "Not In Building"
             }
         } else {
-            println("null")
+            print("null")
             cell.backgroundColor = UIColor.lightGrayColor()
             cell.detailTextLabel!.text = "User Not Logged In"
         }

@@ -12,7 +12,7 @@ import Parse
 import Bolts
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
+class AppDelegate : UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
 
     var window: UIWindow?
     var locationManager: CLLocationManager?
@@ -54,16 +54,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         let beacon_3_Identifier = "iOSRoom"
         
         // All Beacons Region
-        let allBeaconsRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: beaconUUID, identifier: beaconIdentifier)
+        let allBeaconsRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: beaconUUID!, identifier: beaconIdentifier)
         
         // Purple Beacon Region
-        let purpleBeaconRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: beaconUUID, major: beacon_1_major, minor:beacon_1_minor , identifier: beacon_1_Identifier)
+        let purpleBeaconRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: beaconUUID!, major: beacon_1_major, minor:beacon_1_minor , identifier: beacon_1_Identifier)
         
         // Blue Beacon Region
-        let blueBeaconRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: beaconUUID, major: beacon_2_major, minor: beacon_2_minor, identifier: beacon_2_Identifier)
+        let blueBeaconRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: beaconUUID!, major: beacon_2_major, minor: beacon_2_minor, identifier: beacon_2_Identifier)
         
         // Green Beacon Region
-        let greenBeaconRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: beaconUUID, major: beacon_3_major, minor: beacon_3_minor, identifier: beacon_3_Identifier)
+        let greenBeaconRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: beaconUUID!, major: beacon_3_major, minor: beacon_3_minor, identifier: beacon_3_Identifier)
         
         self.locationManager = CLLocationManager()
         if(locationManager!.respondsToSelector("requestAlwaysAuthorization"))   {
@@ -98,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         if(application.respondsToSelector("registerUserNotificationSettings:")) {
             application.registerUserNotificationSettings(
                 UIUserNotificationSettings(
-                    forTypes: UIUserNotificationType.Alert | UIUserNotificationType.Sound,
+                    forTypes: [UIUserNotificationType.Alert, UIUserNotificationType.Sound],
                     categories: nil))
         }
         
@@ -128,21 +128,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
 
 
-}
-
-extension AppDelegate: CLLocationManagerDelegate  {
     func sendLocalNotificationWithMessage(message: String!)  {
-        let notification = UILocalNotification()
+        let notification:UILocalNotification = UILocalNotification()
         notification.alertBody = message
         notification.soundName = UILocalNotificationDefaultSoundName;
         UIApplication.sharedApplication().scheduleLocalNotification(notification)
     }
-    
-    func locationManager(manager: CLLocationManager!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
+
+    func locationManager(manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], inRegion region: CLBeaconRegion) {
 //        println("didRangeBeacons \(beacons.count)")
 
          if (beacons.count > 0) {
-            let nearestBeacon: CLBeacon = beacons[0] as! CLBeacon
+            let nearestBeacon: CLBeacon = beacons[0] 
             
             if(nearestBeacon.proximity == lastProximity || nearestBeacon.proximity == CLProximity.Unknown) {
                 return
@@ -152,7 +149,7 @@ extension AppDelegate: CLLocationManagerDelegate  {
             switch nearestBeacon.proximity  {
             case CLProximity.Immediate:
               //  if (self.lastProximity != CLProximity.Immediate)  {
-                println("You are in the immediate proximity of \(region.identifier) beacon")
+                print("You are in the immediate proximity of \(region.identifier) beacon")
                 if let currentUser = PFUser.currentUser() {
                     currentUser["currentRoom"] = region.identifier
                     currentUser.saveEventually()
@@ -161,7 +158,7 @@ extension AppDelegate: CLLocationManagerDelegate  {
                // }
             case CLProximity.Near:
               //  if (self.lastProximity != proximity)  {
-                println("You are near \(region.identifier) beacon")
+                print("You are near \(region.identifier) beacon")
 //                if let currentUser = PFUser.currentUser() {
 //                    currentUser["currentRoom"] = region.identifier
 //                }
@@ -169,7 +166,7 @@ extension AppDelegate: CLLocationManagerDelegate  {
               //  }
             case CLProximity.Far:
               //  if (self.lastProximity != proximity)  {
-                println("You are far away from \(region.identifier) beacon")
+                print("You are far away from \(region.identifier) beacon")
               //  }
             case CLProximity.Unknown:
                 return
@@ -182,19 +179,19 @@ extension AppDelegate: CLLocationManagerDelegate  {
     }
     
     
-    func locationManager(manager: CLLocationManager!, didDetermineState state: CLRegionState, forRegion region: CLRegion!) {
+    func locationManager(manager: CLLocationManager, didDetermineState state: CLRegionState, forRegion region: CLRegion) {
         switch state {
         case .Unknown:
-            println("Region Unknown")
+            print("Region Unknown")
         case .Inside:
-            println("Inside Beacon Region")
+            print("Inside Beacon Region")
         case .Outside:
-            println("Outside Beacon Region")
+            print("Outside Beacon Region")
         }
     }
     
-    func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
-        println("You have entered the Beacon Region")
+    func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        print("You have entered the Beacon Region")
         
         if let currentUser = PFUser.currentUser() {
             currentUser["dateLastEntered"] = NSDate()
@@ -213,8 +210,8 @@ extension AppDelegate: CLLocationManagerDelegate  {
         //  manager.requestStateForRegion(region as! CLBeaconRegion)
     }
 
-    func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
-        println("You have exited the Beacon Region")
+    func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
+        print("You have exited the Beacon Region")
         if let currentUser = PFUser.currentUser() {
             currentUser["dateLastExited"] = NSDate()
             currentUser["isInBuilding"] = false
